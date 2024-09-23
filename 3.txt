@@ -1,0 +1,12 @@
+docker run -p 80:80 my-react-app
+
+check deployment
+http://localhost
+
+
+or 
+
+docker run -p 3000:80 my-react-app
+
+check deployment
+http://localhost:3000

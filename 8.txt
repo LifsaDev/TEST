@@ -1,0 +1,5 @@
+minikube service react-app-service
+
+or
+
+http://localhost:30001

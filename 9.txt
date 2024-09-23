@@ -1,0 +1,1 @@
+kubectl scale deployment react-app --replicas=5
