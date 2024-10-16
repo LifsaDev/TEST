@@ -1,5 +1,4 @@
 # frontend/Dockerfile
-# Pull official Node.js image
 FROM node:18-alpine
 
 # Set working directory
@@ -19,7 +18,7 @@ RUN yarn build
 RUN yarn global add serve
 
 # Expose the port
-EXPOSE 3000
+EXPOSE 8080  # Change from 3000 to 8080
 
 # Serve the app
-CMD ["serve", "-s", "build"]
+CMD ["serve", "-s", "build", "-l", "8080"]
