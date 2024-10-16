@@ -1,28 +1,23 @@
-# Stage 1: Build the React app
-FROM node:18 as build
+# backend/Dockerfile
+# Pull official base image
+FROM python:3.10-slim
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json files
-COPY package*.json ./
-
 # Install dependencies
-RUN npm install
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
-COPY . .
+# Copy project files
+COPY . /app/
 
-# Build the React application
-RUN npm run build
+# Expose the port for the Django app
+EXPOSE 8000
 
-# Stage 2: Serve the React app using a simple web server
-FROM nginx:stable-alpine
-
-# Copy the build output to NGINX's web directory
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Start NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Run the Django app
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
