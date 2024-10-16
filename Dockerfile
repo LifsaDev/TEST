@@ -1,23 +1,25 @@
-# backend/Dockerfile
-# Pull official base image
-FROM python:3.10-slim
-
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# frontend/Dockerfile
+# Pull official Node.js image
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
 # Install dependencies
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Copy project files
-COPY . /app/
+# Copy the rest of the app files
+COPY . .
 
-# Expose the port for the Django app
-EXPOSE 8000
+# Build the React app
+RUN yarn build
 
-# Run the Django app
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Serve the built app using serve
+RUN yarn global add serve
+
+# Expose the port
+EXPOSE 3000
+
+# Serve the app
+CMD ["serve", "-s", "build"]
